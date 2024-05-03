@@ -78,7 +78,7 @@ const getMyStories = asyncHandler( async (req, res) => {
                 ...story.toObject(),
                 isEditable: true // Set isEditable to true for the current user's stories
             };
-        });
+        }).sort({ createdAt: -1 });
 
         // Respond with the user's stories
         return res.status(200).json(
@@ -110,7 +110,7 @@ const getAllStories = asyncHandler(async (req, res) => {
         // If category is 'all', fetch all stories
         if (category === 'all') {
             // Fetch all stories from the database
-            const allStories = await Story.find();
+            const allStories = await Story.find().sort({ createdAt: -1 });
 
             // Respond with all stories
             return res.status(200).json(
@@ -129,7 +129,7 @@ const getAllStories = asyncHandler(async (req, res) => {
         }
 
         // Fetch stories based on the filter
-        const filteredStories = await Story.find(filter);
+        const filteredStories = await Story.find(filter).sort({ createdAt: -1 });
 
         // Respond with the filtered stories
         return res.status(200).json(
@@ -157,8 +157,8 @@ const getStoriesByCategory = asyncHandler(async (req, res) => {
         const category = req.params.category;
 
         // Fetch stories based on the category from the database
-        const storiesByCategory = await Story.find({ "slides.category": category });
-        // Respond with stories filtered by category
+        const storiesByCategory = await Story.find({ "slides.category": category }).sort({ createdAt: -1 }); 
+
         return res.status(200).json(
             new ApiResponse(
                 200,
